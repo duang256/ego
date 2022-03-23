@@ -45,4 +45,17 @@ public class PageController {
     public String showPage(@PathVariable String page){
         return page;
     }
+
+    /**
+     * 商品编辑
+     * @return
+     */
+    @RequestMapping("/rest/page/item-edit")
+    public String showEdit(){
+        return "item-edit";
+    }
+
+
+
+
 }
