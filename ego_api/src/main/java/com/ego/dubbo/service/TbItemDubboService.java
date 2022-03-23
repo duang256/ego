@@ -2,6 +2,7 @@ package com.ego.dubbo.service;
 
 import com.ego.commons.exception.DaoException;
 import com.ego.pojo.TbItem;
+import com.ego.pojo.TbItemDesc;
 
 import java.util.List;
 
@@ -28,4 +29,22 @@ public interface TbItemDubboService {
      * @return 成功1，失败0
      */
     int updateStatusByIds(long[] ids,int status) throws DaoException;
+
+
+    /**
+     * 商品新增功能
+     * @param tbItem 商品信息
+     * @param tbItemDesc 商品描述信息 放到tbItemDesc表中
+     * @return 成功1，失败0
+     */
+    int insert(TbItem tbItem, TbItemDesc tbItemDesc) throws  DaoException;
+
+    /**
+     * 商品修改
+     * @param tbItem 商品信息
+     * @param tbItemDesc 商品描述信息 放到tbItemDesc表中
+     * @return 成功1，失败0
+     * @throws DaoException
+     */
+    int update(TbItem tbItem,TbItemDesc tbItemDesc) throws  DaoException;
 }

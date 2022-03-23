@@ -2,6 +2,7 @@ package com.ego.controller;
 
 import com.ego.commons.pojo.EasyUIDatagrid;
 import com.ego.commons.pojo.EgoResult;
+import com.ego.pojo.TbItem;
 import com.ego.service.TbItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,4 +59,21 @@ public class TbItemController {
         return tbItemService.updateStatus(ids, 2);
     }
 
+    /**
+     * 新增商品
+     * @param tbItem 商品信息
+     * @param desc 商品描述
+     * @return EgoResult
+     */
+    @RequestMapping("/item/save")
+    @ResponseBody
+    public EgoResult insert(TbItem tbItem, String desc){
+        return tbItemService.insertItem(tbItem,desc);
+    }
+
+    @RequestMapping("/rest/item/update")
+    @ResponseBody
+    public EgoResult update(TbItem tbItem,String desc){
+        return tbItemService.updateItem(tbItem,desc);
+    }
 }
