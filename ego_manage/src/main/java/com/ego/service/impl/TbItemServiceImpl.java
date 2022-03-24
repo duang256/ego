@@ -7,6 +7,7 @@ import com.ego.commons.utils.IDUtils;
 import com.ego.dubbo.service.TbItemDubboService;
 import com.ego.pojo.TbItem;
 import com.ego.pojo.TbItemDesc;
+import com.ego.pojo.TbItemParamItem;
 import com.ego.service.TbItemService;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class TbItemServiceImpl implements TbItemService {
     }
 
     @Override
-    public EgoResult insertItem(TbItem tbItem, String desc) {
+    public EgoResult insertItem(TbItem tbItem, String desc,String itemParams) {
         Date date = new Date();
         long id = IDUtils.genItemId();
         tbItem.setCreated(date);
@@ -54,8 +55,14 @@ public class TbItemServiceImpl implements TbItemService {
         tbItemDesc.setItemId(id);
         tbItemDesc.setItemDesc(desc);
 
+        TbItemParamItem tbItemParamItem = new TbItemParamItem();
+        tbItemParamItem.setId(IDUtils.genItemId());
+        tbItemParamItem.setCreated(date);
+        tbItemParamItem.setUpdated(date);
+        tbItemParamItem.setItemId(id);
+        tbItemParamItem.setParamData(itemParams);
         try {
-            int index = tbItemDubboService.insert(tbItem, tbItemDesc);
+            int index = tbItemDubboService.insert(tbItem, tbItemDesc,tbItemParamItem);
             if(index == 1){
                 return EgoResult.ok();
             }
@@ -66,15 +73,22 @@ public class TbItemServiceImpl implements TbItemService {
     }
 
     @Override
-    public EgoResult updateItem(TbItem tbItem, String desc) {
+    public EgoResult updateItem(TbItem tbItem, String desc,String itemParams,long itemParamId) {
         Date date = new Date();
         tbItem.setUpdated(date);
         TbItemDesc tbItemDesc = new TbItemDesc();
         tbItemDesc.setUpdated(date);
         tbItemDesc.setItemDesc(desc);
         tbItemDesc.setItemId(tbItem.getId());
+
+        TbItemParamItem tbItemParamItem = new TbItemParamItem();
+        tbItemParamItem.setParamData(itemParams);
+        //这里id为模板参数主键id
+        tbItemParamItem.setId(itemParamId);
+        tbItemParamItem.setUpdated(date);
+
         try {
-            int index = tbItemDubboService.update(tbItem, tbItemDesc);
+            int index = tbItemDubboService.update(tbItem, tbItemDesc,tbItemParamItem);
             if(index == 1) return EgoResult.ok();
         } catch (DaoException e) {
             e.printStackTrace();

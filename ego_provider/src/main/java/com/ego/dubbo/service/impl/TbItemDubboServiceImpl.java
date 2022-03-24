@@ -4,8 +4,10 @@ import com.ego.commons.exception.DaoException;
 import com.ego.dubbo.service.TbItemDubboService;
 import com.ego.mapper.TbItemDescMapper;
 import com.ego.mapper.TbItemMapper;
+import com.ego.mapper.TbItemParamItemMapper;
 import com.ego.pojo.TbItem;
 import com.ego.pojo.TbItemDesc;
+import com.ego.pojo.TbItemParamItem;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
@@ -27,6 +29,9 @@ public class TbItemDubboServiceImpl implements  TbItemDubboService{
 
     @Autowired
     private TbItemDescMapper tbItemDescMapper;
+
+    @Autowired
+    private TbItemParamItemMapper tbItemParamItemMapper;
 
 
     @Override
@@ -63,13 +68,16 @@ public class TbItemDubboServiceImpl implements  TbItemDubboService{
 
     @Override
     @Transactional
-    public int insert(TbItem tbItem, TbItemDesc tbItemDesc) throws  DaoException{
+    public int insert(TbItem tbItem, TbItemDesc tbItemDesc, TbItemParamItem tbItemParamItem) throws  DaoException{
         int index = tbItemMapper.insert(tbItem);
         if(index == 1) {
             int index2 = tbItemDescMapper.insert(tbItemDesc);
             if(index2 == 1){
                 //只有商品新增和商品描述新增都成功才表示业务成功
-                return 1;
+                int index3 = tbItemParamItemMapper.insert(tbItemParamItem);
+                if(index3 == 1){
+                    return 1;
+                }
             }
 
         }
@@ -79,12 +87,15 @@ public class TbItemDubboServiceImpl implements  TbItemDubboService{
 
     @Override
     @Transactional
-    public int update(TbItem tbItem, TbItemDesc tbItemDesc) throws DaoException {
+    public int update(TbItem tbItem, TbItemDesc tbItemDesc,TbItemParamItem tbItemParamItem) throws DaoException {
         int index = tbItemMapper.updateByPrimaryKeySelective(tbItem);
         if(index == 1){
             int index2 = tbItemDescMapper.updateByPrimaryKeySelective(tbItemDesc);
             if(index2 == 1){
-                return 1;
+                int index3 = tbItemParamItemMapper.updateByPrimaryKeySelective(tbItemParamItem);
+                if(index3 == 1) {
+                    return 1;
+                }
             }
         }
         throw  new DaoException("商品信息修改失败");

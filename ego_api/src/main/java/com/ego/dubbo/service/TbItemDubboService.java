@@ -3,6 +3,8 @@ package com.ego.dubbo.service;
 import com.ego.commons.exception.DaoException;
 import com.ego.pojo.TbItem;
 import com.ego.pojo.TbItemDesc;
+import com.ego.pojo.TbItemParam;
+import com.ego.pojo.TbItemParamItem;
 
 import java.util.List;
 
@@ -37,7 +39,7 @@ public interface TbItemDubboService {
      * @param tbItemDesc 商品描述信息 放到tbItemDesc表中
      * @return 成功1，失败0
      */
-    int insert(TbItem tbItem, TbItemDesc tbItemDesc) throws  DaoException;
+    int insert(TbItem tbItem, TbItemDesc tbItemDesc, TbItemParamItem tbItemParamItem) throws  DaoException;
 
     /**
      * 商品修改
@@ -46,5 +48,5 @@ public interface TbItemDubboService {
      * @return 成功1，失败0
      * @throws DaoException
      */
-    int update(TbItem tbItem,TbItemDesc tbItemDesc) throws  DaoException;
+    int update(TbItem tbItem,TbItemDesc tbItemDesc,TbItemParamItem tbItemParamItem) throws  DaoException;
 }
