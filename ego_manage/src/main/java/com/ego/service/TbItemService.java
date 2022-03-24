@@ -31,7 +31,7 @@ public interface TbItemService {
      * @param desc 因为前端传入参数和pojo不一致，所以这里用String接收了
      * @return EgoResult状态对象
      */
-    EgoResult insertItem(TbItem tbItem,String desc);
+    EgoResult insertItem(TbItem tbItem,String desc,String itemParams);
 
     /**
      * 修改商品信息
@@ -39,5 +39,5 @@ public interface TbItemService {
      * @param desc 因为前端传入参数和pojo不一致，所以这里用String接收了
      * @return EgoResult状态对象
      */
-    EgoResult updateItem(TbItem tbItem,String desc);
+    EgoResult updateItem(TbItem tbItem,String desc,String itemParams,long itemParamId);
 }

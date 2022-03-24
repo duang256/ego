@@ -67,13 +67,13 @@ public class TbItemController {
      */
     @RequestMapping("/item/save")
     @ResponseBody
-    public EgoResult insert(TbItem tbItem, String desc){
-        return tbItemService.insertItem(tbItem,desc);
+    public EgoResult insert(TbItem tbItem, String desc,String itemParams){
+        return tbItemService.insertItem(tbItem,desc,itemParams);
     }
 
     @RequestMapping("/rest/item/update")
     @ResponseBody
-    public EgoResult update(TbItem tbItem,String desc){
-        return tbItemService.updateItem(tbItem,desc);
+    public EgoResult update(TbItem tbItem,String desc,String itemParams,long itemParamId){
+        return tbItemService.updateItem(tbItem,desc,itemParams,itemParamId);
     }
 }

@@ -1,6 +1,9 @@
 package com.ego.service.impl;
 
+import com.ego.commons.exception.DaoException;
 import com.ego.commons.pojo.EasyUIDatagrid;
+import com.ego.commons.pojo.EgoResult;
+import com.ego.commons.utils.IDUtils;
 import com.ego.dubbo.service.TbItemCatDubboService;
 import com.ego.dubbo.service.TbItemParamDubboService;
 import com.ego.pojo.TbItemCat;
@@ -12,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,5 +40,44 @@ public class TbItemParamServiceImpl implements TbItemParamService {
         }
         long total = tbItemParamDubboService.selectCount();
         return new EasyUIDatagrid(listChild,total);
+    }
+
+    @Override
+    public EgoResult showItemParamByCatId(long catId) {
+        TbItemParam tbItemParam = tbItemParamDubboService.selectByCatId(catId);
+        if(tbItemParam != null){
+            return EgoResult.ok(tbItemParam);
+        }
+        return EgoResult.err("类别规格参数查询失败");
+    }
+
+    @Override
+    public EgoResult insert(TbItemParam tbItemParam) {
+        Date date = new Date();
+        tbItemParam.setId(IDUtils.genItemId());
+        tbItemParam.setCreated(date);
+        tbItemParam.setUpdated(date);
+        try {
+            int index = tbItemParamDubboService.insert(tbItemParam);
+            if(index == 1){
+                return EgoResult.ok();
+            }
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return EgoResult.err("新增规格模板失败");
+    }
+
+    @Override
+    public EgoResult delete(long[] ids) {
+        try {
+            int index = tbItemParamDubboService.delete(ids);
+            if(index == 1){
+                return EgoResult.ok();
+            }
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return EgoResult.err("批量删除规格模板失败");
     }
 }
