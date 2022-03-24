@@ -11,4 +11,11 @@ public interface TbItemCatDubboService {
      * @return 所有子类目
      */
     List<TbItemCat> selectByPid(long pid);
+
+    /**
+     * 根据主键进行查询
+     * @param id 主键
+     * @return 详细数据
+     */
+    TbItemCat selectById(long id);
 }
