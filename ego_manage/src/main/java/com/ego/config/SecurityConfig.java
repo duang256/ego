@@ -27,5 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
         //关闭csrf
         http.csrf().disable();
+        //解决iframe中图片提交bug，这是由于spring security引起的
+        http.headers().frameOptions().disable();
     }
 }
