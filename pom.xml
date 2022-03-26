@@ -15,6 +15,9 @@
         <module>ego_provider</module>
         <module>ego_manage</module>
         <module>ego_commons</module>
+        <module>ego_portal</module>
+        <module>ego_item</module>
+        <module>ego_redis</module>
     </modules>
 
     <!-- Spring Boot的父项目，声明所有Spring Boot相关版本 -->
