@@ -6,14 +6,16 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ego_item" />
         <module name="ego_pojo" />
         <module name="ego_api" />
         <module name="ego_portal" />
-        <module name="ego_manage" />
+        <module name="ego_rabbitmq_receive" />
         <module name="ego_mapper" />
+        <module name="ego_manage" />
+        <module name="ego_item" />
         <module name="ego_commons" />
         <module name="ego_provider" />
+        <module name="ego_rabbit_send" />
         <module name="ego_redis" />
       </profile>
     </annotationProcessing>
@@ -29,6 +31,8 @@
       <module name="ego_pojo" options="-parameters" />
       <module name="ego_portal" options="-parameters" />
       <module name="ego_provider" options="-parameters" />
+      <module name="ego_rabbit_send" options="-parameters" />
+      <module name="ego_rabbitmq_receive" options="-parameters" />
       <module name="ego_redis" options="-parameters" />
     </option>
   </component>

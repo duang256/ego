@@ -1,0 +1,13 @@
+spring:
+  rabbitmq:
+    host: 192.168.8.131
+    username: admin
+    password: admin
+  profiles:
+    active: commons,redis
+    # port: 5672
+dubbo:
+  application:
+    name: ego-rabbitmqRec
+  registry:
+    address: zookeeper://192.168.8.128:2181

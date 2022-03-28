@@ -19,6 +19,13 @@
             <groupId>com.ego</groupId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!--依赖commons-->
+        <dependency>
+            <artifactId>ego_rabbit_send</artifactId>
+            <groupId>com.ego</groupId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!--依賴api接口-->
         <dependency>
             <artifactId>ego_api</artifactId>

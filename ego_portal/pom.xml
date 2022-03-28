@@ -81,6 +81,14 @@
         </dependency>
 -->
 
+
+        <!--依赖ego_redis-->
+
+        <dependency>
+            <artifactId>ego_redis</artifactId>
+            <groupId>com.ego</groupId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

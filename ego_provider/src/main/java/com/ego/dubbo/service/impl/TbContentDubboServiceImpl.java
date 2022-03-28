@@ -69,4 +69,17 @@ public class TbContentDubboServiceImpl implements TbContentDubboService {
         }
         throw new DaoException("批量删除内容失败");
     }
+
+    @Override
+    public List<TbContent> selectAllByCategoryIdOrder(long categoryId) {
+        TbContentExample example = new TbContentExample();
+        example.createCriteria().andCategoryIdEqualTo(categoryId);
+        example.setOrderByClause("updated desc");
+        return tbContentMapper.selectByExampleWithBLOBs(example);
+    }
+
+    @Override
+    public TbContent selectById(long id) {
+        return tbContentMapper.selectByPrimaryKey(id);
+    }
 }

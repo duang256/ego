@@ -43,4 +43,18 @@ public interface TbContentDubboService {
      * @return
      */
     int delete(long[] ids) throws DaoException;
+
+    /**
+     * 按照更新时间降序排序
+     * @param categoryId
+     * @return
+     */
+    List<TbContent> selectAllByCategoryIdOrder(long categoryId);
+
+    /**
+     * 根据主键查询
+     * @param id
+     * @return
+     */
+    TbContent selectById(long id);
 }
