@@ -14,4 +14,4 @@ spring:
       suffix: .jsp
 
   profiles:
-    active: commons
+    active: commons,rabbitmq
