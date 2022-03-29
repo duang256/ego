@@ -1,0 +1,25 @@
+dubbo:
+  application:
+    name: ego-search
+  registry:
+    address: zookeeper://192.168.8.128:2181
+    timeout: 200000
+  config-center:
+    timeout: 200000
+
+server:
+  port: 8083
+
+#Spring MVC视图解析器
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+
+  profiles:
+    active: commons,redis
+    # solr
+  data:
+    solr:
+      host: http://192.168.8.132:8983/solr

@@ -10,3 +10,10 @@ ego:
   rabbitmq:
     content:
       queuename: content
+    item:
+      insertName: insertItem
+      deleteName: deleteItem
+  portal:
+    location: http://localhost:8082/
+  search:
+    location: http://localhost:8083/

@@ -4,10 +4,10 @@ spring:
     username: admin
     password: admin
   profiles:
-    active: commons,redis
+    active: commons
     # port: 5672
-dubbo:
-  application:
-    name: ego-rabbitmqRec
-  registry:
-    address: zookeeper://192.168.8.128:2181
+#dubbo:
+#  application:
+#    name: ego-rabbitmqRec
+#  registry:
+#    address: zookeeper://192.168.8.128:2181

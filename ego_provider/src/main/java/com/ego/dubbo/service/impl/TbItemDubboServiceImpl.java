@@ -100,4 +100,9 @@ public class TbItemDubboServiceImpl implements  TbItemDubboService{
         }
         throw  new DaoException("商品信息修改失败");
     }
+
+    @Override
+    public TbItem selectById(long id) {
+        return tbItemMapper.selectByPrimaryKey(id);
+    }
 }

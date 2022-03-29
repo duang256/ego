@@ -8,8 +8,13 @@ import com.ego.dubbo.service.TbItemDubboService;
 import com.ego.pojo.TbItem;
 import com.ego.pojo.TbItemDesc;
 import com.ego.pojo.TbItemParamItem;
+import com.ego.sender.Send;
 import com.ego.service.TbItemService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.Reference;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,6 +24,16 @@ import java.util.List;
 public class TbItemServiceImpl implements TbItemService {
     @Reference
     private TbItemDubboService tbItemDubboService;
+
+    @Autowired
+    private Send send;
+
+    @Value("${ego.rabbitmq.item.insertName}")
+    private String insertName;
+
+    @Value("${ego.rabbitmq.item.deleteName}")
+    private String deleteName;
+
     @Override
     public EasyUIDatagrid showItem(int page, int rows) {
         List<TbItem> list = tbItemDubboService.selectByPage(rows, page);
@@ -31,6 +46,14 @@ public class TbItemServiceImpl implements TbItemService {
         try {
             int index = tbItemDubboService.updateStatusByIds(ids, status);
             if(index == 1) {
+                if(status == 1) {
+                    //上架
+                    //将ids数组转换为String，逗号分隔
+                    send.send(insertName, StringUtils.join(ids,','));
+                }else if(status == 2 || status == 3){
+                    //下架或删除
+                    send.send(deleteName, StringUtils.join(ids,','));
+                }
                 return EgoResult.ok();
             }
         } catch (DaoException e) {
@@ -64,6 +87,7 @@ public class TbItemServiceImpl implements TbItemService {
         try {
             int index = tbItemDubboService.insert(tbItem, tbItemDesc,tbItemParamItem);
             if(index == 1){
+                send.send(insertName,id);
                 return EgoResult.ok();
             }
         } catch (DaoException e) {
@@ -89,7 +113,10 @@ public class TbItemServiceImpl implements TbItemService {
 
         try {
             int index = tbItemDubboService.update(tbItem, tbItemDesc,tbItemParamItem);
-            if(index == 1) return EgoResult.ok();
+            if(index == 1){
+                send.send(insertName,tbItem.getId());
+                return EgoResult.ok();
+            }
         } catch (DaoException e) {
             e.printStackTrace();
         }

@@ -12,5 +12,6 @@
     <file url="file://$PROJECT_DIR$/ego_rabbit_send/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ego_rabbitmq_receive/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ego_redis/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ego_search/src/main/java" charset="UTF-8" />
   </component>
 </project>
