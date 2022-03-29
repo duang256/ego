@@ -15,4 +15,5 @@ public class Send {
     public void send(String queue,Object object){
         amqpTemplate.convertAndSend("amq.direct",queue,object);
     }
+
 }

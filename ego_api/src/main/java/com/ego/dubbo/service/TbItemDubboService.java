@@ -49,4 +49,12 @@ public interface TbItemDubboService {
      * @throws DaoException
      */
     int update(TbItem tbItem,TbItemDesc tbItemDesc,TbItemParamItem tbItemParamItem) throws  DaoException;
+
+
+    /**
+     * 根据主键查询商品
+     * @param id
+     * @return
+     */
+    TbItem selectById(long id);
 }

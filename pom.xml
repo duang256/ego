@@ -20,6 +20,7 @@
         <module>ego_redis</module>
         <module>ego_rabbit_send</module>
         <module>ego_rabbitmq_receive</module>
+        <module>ego_search</module>
     </modules>
 
     <!-- Spring Boot的父项目，声明所有Spring Boot相关版本 -->
