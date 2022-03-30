@@ -39,33 +39,9 @@ public class PortalServiceImpl implements PortalService {
             bigAd.setHref(tbContent.getUrl());
             adList.add(bigAd);
         }
-
         //list数据转换为JSON字符串，Jackson转换
-
         return JsonUtils.objectToJson(adList);
     }
 
 
-    @CachePut(cacheNames = "com.ego.portal",key = "'bigad'")
-    public String bigAdUpdate() {
-        List<TbContent> list = tbContentDubboService.selectAllByCategoryIdOrder(categoryId);
-        List<BigAd> adList = new ArrayList<>();
-
-        for(TbContent tbContent: list){
-            BigAd bigAd = new BigAd();
-            bigAd.setSrc(tbContent.getPic());
-            bigAd.setAlt("");
-            bigAd.setHeight(240);
-            bigAd.setHeightB(240);
-            bigAd.setSrcB(tbContent.getPic2());
-            bigAd.setWidth(670);
-            bigAd.setWidthB(550);
-            bigAd.setHref(tbContent.getUrl());
-            adList.add(bigAd);
-        }
-
-        //list数据转换为JSON字符串，Jackson转换
-
-        return JsonUtils.objectToJson(adList);
-    }
 }

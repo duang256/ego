@@ -17,11 +17,5 @@ public class PortalController {
         model.addAttribute("ad1",portalService.showBigAd());
         return "index";
     }
-    @RequestMapping("bigadUpdate")
-    @ResponseBody
-    public String  bigadUpdate(){
-         portalService.bigAdUpdate();
-         return "ok";
-    }
 
 }
