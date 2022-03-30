@@ -87,6 +87,7 @@ public class TbItemServiceImpl implements TbItemService {
         try {
             int index = tbItemDubboService.insert(tbItem, tbItemDesc,tbItemParamItem);
             if(index == 1){
+                //对solr进行同步
                 send.send(insertName,id);
                 return EgoResult.ok();
             }
