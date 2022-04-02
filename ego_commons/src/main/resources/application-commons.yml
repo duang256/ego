@@ -13,7 +13,21 @@ ego:
     item:
       insertName: insertItem
       deleteName: deleteItem
+    order:
+      createOrder: createOrder
+      deleteCart: deleteCart
+    mail: mail
+
+
   portal:
     location: http://localhost:8082/
   search:
     location: http://localhost:8083/
+  item:
+    redisKey: 'com.ego.item::showItem:'
+  cart:
+    tempcart: tempcart
+    redisKey: 'cart:'
+    location: http://localhost:8085/
+  passport:
+    loginurl: http://localhost:8084/user/showLogin

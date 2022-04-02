@@ -1,0 +1,12 @@
+spring:
+  mail:
+    username: yueyan433015@163.com
+    password: GAFDXBUXHUITGGMJ
+    host: smtp.163.com
+    properties:
+      mail:
+        smtp:
+          #开启邮箱客户端功能
+          auth: true
+server:
+  port: 8087

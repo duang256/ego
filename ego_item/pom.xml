@@ -68,25 +68,6 @@
             <artifactId>pagehelper</artifactId>
         </dependency>
 
-        <!-- fastdfs -->
-        <!--<dependency>
-            <groupId>cn.bestwu</groupId>
-            <artifactId>fastdfs-client-java</artifactId>
-            <version>${fastdfs-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${common-lang3-version}</version>
-        </dependency>-->
-
-        <!-- security-->
-        <!--
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-security</artifactId>
-                </dependency>
-        -->
 
     </dependencies>
 </project>
