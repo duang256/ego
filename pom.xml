@@ -22,6 +22,9 @@
         <module>ego_rabbitmq_receive</module>
         <module>ego_search</module>
         <module>ego_passport</module>
+        <module>ego_cart</module>
+        <module>ego_trade</module>
+        <module>ego_mail</module>
     </modules>
 
     <!-- Spring Boot的父项目，声明所有Spring Boot相关版本 -->
@@ -205,5 +208,18 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <fork>true</fork>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>

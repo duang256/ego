@@ -16,4 +16,14 @@ public class Send {
         amqpTemplate.convertAndSend("amq.direct",queue,object);
     }
 
+    /**
+     * 此方法返回值就是receive方法的返回值
+     * @param queue
+     * @param object
+     * @return
+     */
+    public Object sendAndReceive(String queue,Object object){
+        return amqpTemplate.convertSendAndReceive("amq.direct",queue,object);
+    }
+
 }

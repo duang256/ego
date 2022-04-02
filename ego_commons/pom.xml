@@ -13,6 +13,13 @@
 
     <dependencies>
 
+
+        <!--依赖pojo-->
+        <dependency>
+            <artifactId>ego_pojo</artifactId>
+            <groupId>com.ego</groupId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!-- httpclient-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -31,6 +38,16 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <!-- servlet-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
         </dependency>
     </dependencies>
 
