@@ -47,4 +47,6 @@ provider1和provider2配置相同的注册名到zk，自动集群化，nginx负�
 https://blog.csdn.net/qq_41422009/article/details/122865240?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&utm_relevant_index=2
 
 
-
+由于github没法上传100MB以上的文件，所以我的环境部署文件没法上传
+链接：https://pan.baidu.com/s/1wNM5YdzC0V4ZRrl80IhMOA 
+提取码：6s1h
