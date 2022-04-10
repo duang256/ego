@@ -35,8 +35,7 @@ public class TbOrderDubboServiceImpl implements TbOrderDubboService {
         if(index == 1){
             int itemIndex = 0;
             int updateItemNum = 0;
-            for (TbOrderItem item: list
-                 ) {
+            for (TbOrderItem item: list) {
                 itemIndex += tbOrderItemMapper.insert(item);
                 //修改商品库存
                 long itemId = Long.parseLong(item.getItemId());

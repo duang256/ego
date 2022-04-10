@@ -24,7 +24,7 @@ public class TbContentCategoryController {
      * @return
      */
     @RequestMapping("/content/category/list")
-    public List<EasyUITree> showContentCategory(@RequestParam(defaultValue = "0") long id){
+    public List<EasyUITree> showContentCategory(@RequestParam(defaultValue = "0",required = false) long id){
         return tbContentCategoryService.showContentCategory(id);
     }
 

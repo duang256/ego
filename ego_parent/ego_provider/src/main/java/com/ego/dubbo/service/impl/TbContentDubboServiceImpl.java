@@ -20,7 +20,8 @@ public class TbContentDubboServiceImpl implements TbContentDubboService {
 
     /**
      * 需要编写动态sql
-     * 如果category=0就查询全部
+     * 如果categoryId=0就查询全部
+     *
      * @param categoryId
      * @param pageNumber
      * @param pageSize
@@ -28,20 +29,20 @@ public class TbContentDubboServiceImpl implements TbContentDubboService {
      */
     @Override
     public List<TbContent> selectByPage(long categoryId, int pageNumber, int pageSize) {
-        PageHelper.startPage(pageNumber,pageSize);
+        PageHelper.startPage(pageNumber, pageSize);
         TbContentExample tbContentExample = new TbContentExample();
-        if(categoryId != 0) {
+        if (categoryId != 0) {
             tbContentExample.createCriteria().andCategoryIdEqualTo(categoryId);
         }
         List<TbContent> list = tbContentMapper.selectByExampleWithBLOBs(tbContentExample);
         PageInfo<TbContent> pi = new PageInfo<>(list);
-        return  pi.getList();
+        return pi.getList();
     }
 
     @Override
     public long selectCountByCategoryId(long categoryId) {
         TbContentExample tbContentExample = new TbContentExample();
-        if(categoryId != 0) {
+        if (categoryId != 0) {
             tbContentExample.createCriteria().andCategoryIdEqualTo(categoryId);
         }
         return tbContentMapper.countByExample(tbContentExample);
@@ -61,15 +62,21 @@ public class TbContentDubboServiceImpl implements TbContentDubboService {
     @Transactional
     public int delete(long[] ids) throws DaoException {
         int index = 0;
-        for(long id : ids){
+        for (long id : ids) {
             index += tbContentMapper.deleteByPrimaryKey(id);
         }
-        if(index == ids.length){
+        if (index == ids.length) {
             return 1;
         }
         throw new DaoException("批量删除内容失败");
     }
 
+    /**
+     * 返回所有大广告信息
+     *
+     * @param categoryId
+     * @return
+     */
     @Override
     public List<TbContent> selectAllByCategoryIdOrder(long categoryId) {
         TbContentExample example = new TbContentExample();
@@ -77,6 +84,7 @@ public class TbContentDubboServiceImpl implements TbContentDubboService {
         example.setOrderByClause("updated desc");
         return tbContentMapper.selectByExampleWithBLOBs(example);
     }
+
 
     @Override
     public TbContent selectById(long id) {

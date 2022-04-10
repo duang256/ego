@@ -4,6 +4,7 @@ spring:
     active: mapper
 
 
+#作为dubbo的provider方，配置zk位置
 dubbo:
   application:
     name: ego-provider

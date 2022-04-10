@@ -20,9 +20,10 @@ public class PortalServiceImpl implements PortalService {
     private TbContentDubboService tbContentDubboService;
     @Value("${ego.bigad.categoryId}")
     private Long categoryId;
-    
+
+
     @Override
-    @Cacheable(cacheNames = "com.ego.portal",key = "'bigad'")
+    @Cacheable(cacheNames = "${ego.bigad.redisKey}")
     public String showBigAd() {
         List<TbContent> list = tbContentDubboService.selectAllByCategoryIdOrder(categoryId);
         List<BigAd> adList = new ArrayList<>();
@@ -42,6 +43,5 @@ public class PortalServiceImpl implements PortalService {
         //list数据转换为JSON字符串，Jackson转换
         return JsonUtils.objectToJson(adList);
     }
-
 
 }

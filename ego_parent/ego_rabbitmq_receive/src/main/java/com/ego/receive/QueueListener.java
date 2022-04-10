@@ -1,12 +1,10 @@
 package com.ego.receive;
 
-import com.ego.commons.pojo.BigAd;
 import com.ego.commons.pojo.DeleteCartPojo;
 import com.ego.commons.pojo.OrderPojo;
 import com.ego.commons.pojo.TbItemDetails;
 import com.ego.commons.utils.HttpClientUtil;
 import com.ego.commons.utils.IDUtils;
-import com.ego.commons.utils.JsonUtils;
 import com.ego.dubbo.service.TbContentDubboService;
 import com.ego.dubbo.service.TbItemDubboService;
 import com.ego.dubbo.service.TbOrderDubboService;
@@ -29,11 +27,35 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.*;
 
-
+/**
+ * 读取缓存步骤一般没什么问题，但是一旦涉及到数据更新、数据库更新和缓存更新，就容易出现缓存和数据库间的一致性问题
+ * 写库后更新缓存
+ *        A更新库
+ *        B更新库
+ *        B更新缓存
+ *        A更新缓存（脏数据）
+ * 删缓存后更新库
+ *        A删缓存
+ *        B发现缓存没有了
+ *        B请求数据库加入缓存（脏）
+ *        A将新值入库
+ * 更新库，删除缓存
+ *        1、缓存失效
+ *        2、A查询数据库
+ *        3、B将新值入库
+ *        4、B删除缓存
+ *        5、A将旧值写入缓存
+ *    但此种情形比较难出现，2比3块，所以5一般在4前面，此种情况是较为理想的，另外可以通过延迟删除缓存来达到更理想的装状态
+ * 延时双删策略
+ *        先删除缓存
+ *        写库
+ *        sleep500ms
+ *        缓存
+ *
+ *
+ */
 @Component
 public class QueueListener {
-    //redis同步缓存
-    //solr异步缓存
 
     @Reference
     private TbItemDubboService tbItemDubboService;
@@ -47,12 +69,19 @@ public class QueueListener {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    //大广告缓存key
+    @Value("${ego.bigad.redisKey}")
+    private String bidAdKey;
+
+    //商品缓存key + 商品id
+    @Value("${ego.item.redisKey}")
+    private String itemKey;
+
+    //搜索模块url
     @Value("${ego.search.location}")
     private String searchLocation;
 
-    @Value("${ego.bigad.categoryId}")
-    private Long categoryId;
-
+    //购物车模块url
     @Value("${ego.cart.location}")
     private String cartLocation;
 
@@ -60,43 +89,33 @@ public class QueueListener {
     private EgoMailSender egoMailSender;
 
 
+    /**
+     * 大广告缓存删除
+     * @param object
+     */
     //即使没有发送队列，启动receiver也会创建
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue(name = "${ego.rabbitmq.content.queuename}"), exchange = @Exchange(name = "amq.direct"))})
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue(name = "${ego.rabbitmq.content.deleteBigad}"), exchange = @Exchange(name = "amq.direct"))})
     public void content(Object object) {
-        System.out.println("接收到更新广告redis消息");
-
-        String key = "com.ego.portal::bigad";
-        List<TbContent> list = tbContentDubboService.selectAllByCategoryIdOrder(categoryId);
-        List<BigAd> adList = new ArrayList<>();
-
-        for (TbContent tbContent : list) {
-            BigAd bigAd = new BigAd();
-            bigAd.setSrc(tbContent.getPic());
-            bigAd.setAlt("");
-            bigAd.setHeight(240);
-            bigAd.setHeightB(240);
-            bigAd.setSrcB(tbContent.getPic2());
-            bigAd.setWidth(670);
-            bigAd.setWidthB(550);
-            bigAd.setHref(tbContent.getUrl());
-            adList.add(bigAd);
-        }
-        //list数据转换为JSON字符串，Jackson转换
-        redisTemplate.opsForValue().set(key, JsonUtils.objectToJson(adList));
+        System.out.println("删除大广告redishuancun");
+        redisTemplate.delete(bidAdKey);
     }
 
 
+    /**
+     * 新增商品加入redis，加入solr
+     * @param id
+     */
     @RabbitListener(bindings = {@QueueBinding(value = @Queue(name = "${ego.rabbitmq.item.insertName}"), exchange = @Exchange(name = "amq.direct"))})
     public void insertItem(String id) {
         System.out.println("接收到新增id" + id);
-
+        //新增商品加入solr
         Map<String, String> map = new HashMap<>();
         map.put("ids", id);
         HttpClientUtil.doGet(searchLocation + "insert", map);
 
         String[] ids = id.split(",");
         for (String idArr : ids) {
-            String key = "com.ego.item::showItem:" + idArr;
+            String key = itemKey + idArr;
             TbItem tbItem = tbItemDubboService.selectById(Long.parseLong(idArr));
             TbItemDetails details = new TbItemDetails();
             details.setId(Long.parseLong(idArr));
@@ -108,18 +127,23 @@ public class QueueListener {
         }
     }
 
+    /**
+     * 删除商品redis缓存，删除solr中商品
+     * @param id
+     */
     @RabbitListener(bindings = {@QueueBinding(value = @Queue(name = "${ego.rabbitmq.item.deleteName}"), exchange = @Exchange(name = "amq.direct"))})
     public void deleteItem(String id) {
         System.out.println("接收到删除id" + id);
 
         Map<String, String> map = new HashMap<>();
         map.put("ids", id);
-        HttpClientUtil.doGet(searchLocation + "delete", map);
 
+        //从solr中删除商品
+        HttpClientUtil.doGet(searchLocation + "delete", map);
 
         String[] ids = id.split(",");
         for (String idArr : ids) {
-            String key = "com.ego.item::showItem:" + idArr;
+            String key = itemKey + idArr;
             redisTemplate.delete(key);
         }
     }
@@ -133,12 +157,12 @@ public class QueueListener {
      */
     @RabbitListener(bindings = {@QueueBinding(value = @Queue(name = "${ego.rabbitmq.order.createOrder}"), exchange = @Exchange(name = "amq.direct"))})
     public String createOrder(Message message) {
-        //序列化和反序列化
         try {
+            //反序列化
             byte[] body = message.getBody();
-            InputStream is = new ByteArrayInputStream(body);
-            ObjectInputStream objectInputStream = new ObjectInputStream(is);
+            ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(body));
             OrderPojo orderPojo = (OrderPojo) objectInputStream.readObject();
+
             //获取所有商品List
             List<TbOrderItem> orderItems = orderPojo.getOrderItems();
             //判断库存
@@ -209,6 +233,7 @@ public class QueueListener {
 
     @RabbitListener(bindings = {@QueueBinding(value = @Queue(name = "${ego.rabbitmq.mail}"), exchange = @Exchange(name = "amq.direct"))})
     public void mail(String orderId) {
+        //向谁发送邮件
         egoMailSender.send("2608194130@qq.com",orderId);
     }
 

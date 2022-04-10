@@ -36,9 +36,7 @@ public class TbItemDubboServiceImpl implements  TbItemDubboService{
 
     @Override
     public List<TbItem> selectByPage(int pageSize, int pageNumber) {
-
-        //因为example只能做where限定，分页做不了，传入null即可
-        // 另外使用pageHelper分页,分页插件必须写在查询的上面
+        //查询所有状态的商品
         PageHelper.startPage(pageNumber,pageSize);
         List<TbItem> list = tbItemMapper.selectByExample(null);
         PageInfo<TbItem> pi  = new PageInfo<>(list);
@@ -51,7 +49,6 @@ public class TbItemDubboServiceImpl implements  TbItemDubboService{
     }
 
     @Override
-    //监听到异常，执行事务回滚
     @Transactional
     public int updateStatusByIds(long[] ids, int status) throws DaoException{
         int index = 0;

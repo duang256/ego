@@ -15,6 +15,11 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
+    /**
+     * 跨域请求
+     * portal页面中查询商品菜单
+     * @return
+     */
     @RequestMapping("rest/itemcat/all")
     @ResponseBody
     @CrossOrigin
@@ -33,8 +38,6 @@ public class ItemController {
         model.addAttribute("item",itemService.showItem(id));
         return "item";
     }
-
-    //   /item/desc/164856686477407.html
 
     /**
      * 显示商品描述

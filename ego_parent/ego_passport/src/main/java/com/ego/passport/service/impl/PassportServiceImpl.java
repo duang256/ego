@@ -10,16 +10,14 @@ import com.ego.dubbo.service.TbUserDubboService;
 import com.ego.passport.service.PassportService;
 import com.ego.pojo.TbUser;
 import org.apache.dubbo.config.annotation.Reference;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PassportServiceImpl implements PassportService{
@@ -71,27 +69,30 @@ public class PassportServiceImpl implements PassportService{
         String pwdMd = DigestUtils.md5DigestAsHex(tbUser.getPassword().getBytes());
         tbUser.setPassword(pwdMd);
         TbUser user = tbUserDubboService.selectByUsernamePwd(tbUser);
-        //这里需要放入user放入EgoResult中，控制器需要把用户信息放到作用域中
+
         if(user != null){
             /*
             登录时临时购物车合并到redis中
              */
 
-
             //获取cookie临时购物车信息
             String cookieValue = CookieUtils.getCookieValueBase64(ServletUtil.getRequest(),tempcartKey);
+            Map<Long, CartPojo> map = new HashMap<>();
+            if(Strings.isNotEmpty(cookieValue)) {
+                map =  JsonUtils.jsonToMap(cookieValue, Long.class, CartPojo.class);
+            }
+
             //redis用户购物车信息，需要处理空指针，如果没有就创建一个
             String key = cartRedisKey + user.getId();
             List<CartPojo> list = (List<CartPojo>)redisTemplate.opsForValue().get(key);
-            Map<Long, CartPojo> map = JsonUtils.jsonToMap(cookieValue, Long.class, CartPojo.class);
 
 
             if(list != null){
-                for (long id : map.keySet()) {
+                for (long id : map.keySet()) {  //临时购物车
                     boolean isExists = false;
-                    for (CartPojo cart : list) {
+                    for (CartPojo cart : list) {  //用户购物车
                         if (id == cart.getId()) {
-                            cart.setNum(cart.getNum() + map.get(id).getNum());
+                            cart.setNum(map.get(id).getNum());
                             isExists = true;
                             break;
                         }
@@ -99,11 +100,8 @@ public class PassportServiceImpl implements PassportService{
                     if (!isExists) {
                         list.add(map.get(id));
                     }
-                    isExists = false;
                 }
                 redisTemplate.opsForValue().set(key, list);
-                //删除临时购物车
-                CookieUtils.deleteCookie(ServletUtil.getRequest(), ServletUtil.getResponse(), tempcartKey);
             }else {
                 list = new ArrayList<>();
                 for(long id : map.keySet()){
@@ -111,6 +109,11 @@ public class PassportServiceImpl implements PassportService{
                 }
                 redisTemplate.opsForValue().set(key, list);
             }
+
+            //删除临时购物车
+            CookieUtils.deleteCookie(ServletUtil.getRequest(), ServletUtil.getResponse(), tempcartKey);
+
+            //这里需要放入user放入EgoResult中，控制器需要把用户信息放到作用域中
             return EgoResult.ok(user);
         }
         return EgoResult.err("账号或密码错误");

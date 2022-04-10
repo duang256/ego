@@ -22,6 +22,7 @@ import java.util.Map;
 @Component
 public class EgoMailSender {
 
+    //发送方邮箱账号
     @Value("${spring.mail.username}")
     private String from;
 

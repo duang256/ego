@@ -2,7 +2,6 @@ package com.ego.controller;
 
 import com.ego.commons.pojo.EasyUITree;
 import com.ego.service.TbItemCatService;
-import com.ego.service.TbItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +14,6 @@ import java.util.List;
 public class TbItemCatController {
     @Autowired
     private TbItemCatService tbItemService;
-
 
     /**
      * easyUI类目树

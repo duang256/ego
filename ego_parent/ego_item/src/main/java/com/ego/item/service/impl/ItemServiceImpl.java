@@ -51,7 +51,9 @@ public class ItemServiceImpl implements ItemService {
         //准备返回的List，将子菜单封装到List中并递归
         List<Object> listResult = new ArrayList<>();
 
+        int count = 0;
         for(TbItemCat cat : list){
+            count++;
             //父节点递归
             if(cat.getIsParent()){
                 CategoryNode node = new CategoryNode();
@@ -62,9 +64,11 @@ public class ItemServiceImpl implements ItemService {
             }else{
                 listResult.add("/products/" + cat.getId() + ".html|" + cat.getName());
             }
+            if(count == 14){
+                break;
+            }
         }
         return listResult;
-
     }
 
     /**
@@ -100,6 +104,8 @@ public class ItemServiceImpl implements ItemService {
 
         String paramData = tbItemParamItem.getParamData();
         List<ParamItem> list = JsonUtils.jsonToList(paramData, ParamItem.class);
+
+        //通过表格形式返回给前端，每个大分组是一个table（ParamItem），每个分组中有一个group名字和List<Param>表示分组属性
         StringBuffer sf= new StringBuffer();
         for(ParamItem paramItem : list){
             sf.append("<table  style='color:gray;' width='100%'  cellpadding='5'>");

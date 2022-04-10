@@ -3,7 +3,6 @@ package com.ego.trade.controller;
 import com.ego.commons.pojo.OrderPojo;
 import com.ego.trade.service.TradeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +26,7 @@ public class TradeController {
             model.addAllAttributes(result);
             return "success";
         }
+        //result为空表示订单创建失败
         model.addAttribute("message","订单创建失败");
         return "error/exception";
     }

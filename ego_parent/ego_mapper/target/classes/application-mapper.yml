@@ -4,9 +4,11 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
     # 填写你数据库的url、登录名、密码和数据库名
-    url: jdbc:mysql://192.168.8.135:8066/ego?useSSL=false&characterEncoding=utf8
+    # mycat jdbc:mysql://192.168.8.135:8066/ego?useSSL=false&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/ego?useSSL=false&characterEncoding=utf8
     username: root
-    password: root
+    # mycat root
+    password: wityy
     druid:
       # 连接池的配置信息
       # 初始化大小，最小，最大

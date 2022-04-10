@@ -1,5 +1,6 @@
 package com.ego.search.service.impl;
 
+import com.ego.commons.pojo.EgoResult;
 import com.ego.dubbo.service.TbItemCatDubboService;
 import com.ego.dubbo.service.TbItemDescDubboService;
 import com.ego.dubbo.service.TbItemDubboService;
@@ -10,9 +11,11 @@ import com.ego.search.pojo.SearchPojo;
 import com.ego.search.service.SearchService;
 import org.apache.dubbo.config.annotation.Reference;
 import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrOperations;
+import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.HighlightEntry;
 import org.springframework.data.solr.core.query.result.HighlightPage;
@@ -23,7 +26,7 @@ import java.util.*;
 @Service
 public class SearchServiceImpl implements SearchService {
     @Autowired
-    private SolrOperations solrOperations;
+    private SolrTemplate solrTemplate;
 
     @Reference
     private TbItemDubboService tbItemDubboService;
@@ -33,6 +36,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Reference
     private TbItemDescDubboService tbItemDescDubboService;
+
 
     @Override
     public Map<String, Object> search(String q,int page,int size) {
@@ -53,11 +57,12 @@ public class SearchServiceImpl implements SearchService {
         HighlightOptions highlightOptions = new HighlightOptions();
         highlightOptions.setSimplePrefix("<span style='color:red'>");
         highlightOptions.setSimplePostfix("</span>");
+        //设置title高亮
         highlightOptions.addField("item_title");
         query.setHighlightOptions(highlightOptions);
 
 
-        HighlightPage<SearchPojo> hlPage = solrOperations.queryForHighlightPage("ego", query, SearchPojo.class);
+        HighlightPage<SearchPojo> hlPage = solrTemplate.queryForHighlightPage("ego", query, SearchPojo.class);
         List<HighlightEntry<SearchPojo>> highlighted = hlPage.getHighlighted();
 
         //创建的返回集合
@@ -81,7 +86,6 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
             listResult.add(searchPojo);
-
         }
 
 
@@ -112,8 +116,8 @@ public class SearchServiceImpl implements SearchService {
             list.add(sp);
         }
 
-        UpdateResponse response = solrOperations.saveBeans("ego", list);
-        solrOperations.commit("ego");
+        UpdateResponse response = solrTemplate.saveBeans("ego", list);
+        solrTemplate.commit("ego");
         //新增成功状态值为0
         if(response.getStatus() ==  0){
             return 1;
@@ -124,8 +128,8 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public int delete(String[] ids) {
         List<String> list = Arrays.asList(ids);
-        UpdateResponse response = solrOperations.deleteByIds("ego", list);
-        solrOperations.commit("ego");
+        UpdateResponse response = solrTemplate.deleteByIds("ego", list);
+        solrTemplate.commit("ego");
         //成功状态值为0
         if(response.getStatus() ==  0){
             return 1;

@@ -55,7 +55,13 @@ public class PageController {
         return "item-edit";
     }
 
-
-
+    /**
+     * 登录失败
+     */
+    @ResponseBody
+    @RequestMapping("/loginFail")
+    public EgoResult loginFail(){
+        return EgoResult.err("账号或密码错误");
+    }
 
 }

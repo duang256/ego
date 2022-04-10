@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class SenderConfig {
-    @Value("${ego.rabbitmq.content.queuename}")
-    private String queuename;
+    @Value("${ego.rabbitmq.content.deleteBigad}")
+    private String deleteBigad;
 
     @Value("${ego.rabbitmq.item.insertName}")
     private String insertName;
@@ -33,17 +33,23 @@ public class SenderConfig {
 
 
     @Bean
-    public Queue queue(){
-        return new Queue(queuename);
-    }
-
-    @Bean
     public DirectExchange directExchange(){
         return new DirectExchange("amq.direct");
     }
 
-    //参数名和方法名一致就是从spring容器中回去方法返回值
+
+    /**
+     * 大广告内容修改删除缓存
+     * @return
+     */
+    @Bean
+    public Queue queue(){
+        return new Queue(deleteBigad);
+    }
+
+
     //新建队列与amp.direct交换器绑定
+    //参数名和方法名一致就是从spring容器中回去方法返回值
     @Bean
     public Binding binding(Queue queue,DirectExchange directExchange){
         return BindingBuilder.bind(queue).to(directExchange).withQueueName();
@@ -51,9 +57,11 @@ public class SenderConfig {
 
 
 
-    /*
-    solr异步消息队列 新增商品
-    同样的，如果启动时没有该队列，则创建${ego.rabbitmq.item.insertName}队列
+
+    /**
+     * solr异步消息队列 新增商品
+     *  同样的，如果启动时没有该队列，则创建${ego.rabbitmq.item.insertName}队列
+     * @return
      */
     @Bean
     public Queue queueInsertItem(){
@@ -99,7 +107,7 @@ public class SenderConfig {
 
     /**
      *
-     * 下订单成功后异步删除购物车
+     * 下订单成功后异步删除购物车对应商品
      */
     @Bean
     public Queue queueDeleteCart(){

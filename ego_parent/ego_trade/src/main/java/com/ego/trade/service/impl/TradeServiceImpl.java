@@ -15,31 +15,33 @@ import java.util.*;
 
 @Service
 public class TradeServiceImpl implements TradeService {
-    @Value("${ego.rabbitmq.order.createOrder}")
-    private String createOrder;
     @Autowired
     private Send send;
 
+    //创建订单rabbitmq
+    @Value("${ego.rabbitmq.order.createOrder}")
+    private String createOrder;
+
+    //删除购物车对应商品rabbitmq
     @Value("${ego.rabbitmq.order.deleteCart}")
     private String deleteCart;
 
+    //发送邮件rabbitmq
     @Value("${ego.rabbitmq.mail}")
     private String mail;
 
 
     @Override
     public Map<String, Object> createOrder(OrderPojo orderPojo) {
-        //此处为同步消息
+        //创建订单，属于同步消息，有返回值，返回的是创建订单的id
         String res = (String)send.sendAndReceive(createOrder, orderPojo);
 
         Map<String,Object> resultMap = null;
-
-        // 删除购物车对应商品 和 发送邮件功能均为rabbitmq异步操作  且都是在订单成功的基础上进行的
-
-
         if(res != null){
 
-            //设定返回值
+            /*
+            前端中需要OrderId、payment和预计到达时间
+             */
             resultMap = new HashMap<>();
             resultMap.put("orderId",res);
             resultMap.put("payment",orderPojo.getPayment());
@@ -60,8 +62,6 @@ public class TradeServiceImpl implements TradeService {
             //返回值设置结束
 
 
-
-
             /*
             删除购物车的操作写在购物车模块里面，在此处进行rabbitmq调用
              */
@@ -80,7 +80,9 @@ public class TradeServiceImpl implements TradeService {
             dcp.setItemIds(sf.toString());
             send.send(deleteCart,dcp);
 
-            //发送邮件
+            /*
+             * 发送邮件
+             */
             send.send(mail,res);
 
         }
