@@ -32,7 +32,6 @@ public class TbUserDubboServiceImpl implements TbUserDubboService {
             return list.get(0);
         }
         return null;
-
     }
 
     @Override

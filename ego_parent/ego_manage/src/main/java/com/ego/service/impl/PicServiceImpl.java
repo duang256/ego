@@ -26,10 +26,7 @@ public class PicServiceImpl implements PicService {
             * 返回值是FastDFS中存储的名字
             * */
             String[] result = FastDFSClient.uploadFile(file.getInputStream(), file.getOriginalFilename());
-            System.out.println(result[0]+ "----" + result[1]);
             map.put("error",0);
-            //测试环境和上线环境不一致的问题，使用软编码实现设置
-            //整个项目所有的软编码都放在commons中
             map.put("url",nginxHost + result[0] + "/" + result[1]);
             return map;
         } catch (IOException e) {

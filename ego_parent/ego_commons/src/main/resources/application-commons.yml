@@ -1,15 +1,16 @@
+# 项目整体软编码
 ego:
+  # fastdfs位置
   fastdfs:
     nginx: http://192.168.8.129:8888/
   bigad:
+    #大广告缓存key
+    redisKey: 'com.ego.portal::bigad'
+    #大广告cid
     categoryId: 89
-  redis:
-    bigad:
-      cacheName: com.ego.portal
-      key: bigad
   rabbitmq:
     content:
-      queuename: content
+      deleteBigad: deleteBigad
     item:
       insertName: insertItem
       deleteName: deleteItem
@@ -17,8 +18,6 @@ ego:
       createOrder: createOrder
       deleteCart: deleteCart
     mail: mail
-
-
   portal:
     location: http://localhost:8082/
   search:
@@ -26,7 +25,9 @@ ego:
   item:
     redisKey: 'com.ego.item::showItem:'
   cart:
+    #购物车cookie名字
     tempcart: tempcart
+    #用户购物车前缀
     redisKey: 'cart:'
     location: http://localhost:8085/
   passport:

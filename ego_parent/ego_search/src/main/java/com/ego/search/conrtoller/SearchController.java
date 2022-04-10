@@ -32,10 +32,14 @@ public class SearchController {
         return searchService.insert(ids);
     }
 
+    /**
+     * 异步删除solr
+     * @param ids
+     * @return
+     */
     @RequestMapping("/delete")
     @ResponseBody
     public int delete(String[] ids){
         return searchService.delete(ids);
     }
-
 }

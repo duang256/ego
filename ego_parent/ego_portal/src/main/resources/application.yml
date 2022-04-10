@@ -1,8 +1,12 @@
+
+# dubbo中的consumer，配置zk位置
 dubbo:
   application:
     name: ego-portal
   registry:
     address: zookeeper://192.168.8.128:2181
+
+# web模块，配置tomcat端口
 server:
   port: 8082
 
@@ -12,6 +16,6 @@ spring:
     view:
       prefix: /WEB-INF/jsp/
       suffix: .jsp
-
+# 引入commons,redis，加载其配置文件
   profiles:
     active: commons,redis

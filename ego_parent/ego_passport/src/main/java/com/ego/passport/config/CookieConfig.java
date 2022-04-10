@@ -12,12 +12,11 @@ import org.springframework.session.web.http.HttpSessionIdResolver;
  */
 @Configuration
 public class CookieConfig {
-
     @Bean
     public CookieSerializer cookieSerializer(){
         DefaultCookieSerializer cookie = new DefaultCookieSerializer();
         cookie.setCookieName("TT_TOKEN");
-        //表示能否被js脚本获取
+        //表示能被js脚本获取
         cookie.setUseHttpOnlyCookie(false);
         return cookie;
     }

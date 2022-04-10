@@ -26,6 +26,8 @@ public class TbItemController {
         return tbItemService.showItem(page,rows);
     }
 
+
+
     /**
      * 删除 状态为3
      * @param ids 批量id
@@ -71,6 +73,15 @@ public class TbItemController {
         return tbItemService.insertItem(tbItem,desc,itemParams);
     }
 
+
+    /**
+     * 修改商品信息
+     * @param tbItem
+     * @param desc
+     * @param itemParams
+     * @param itemParamId
+     * @return
+     */
     @RequestMapping("/rest/item/update")
     @ResponseBody
     public EgoResult update(TbItem tbItem,String desc,String itemParams,long itemParamId){

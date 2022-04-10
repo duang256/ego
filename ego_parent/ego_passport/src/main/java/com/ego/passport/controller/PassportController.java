@@ -112,9 +112,14 @@ public class PassportController {
         return login;
     }
 
+    /**
+     * 其他模块token验证
+     * @param session
+     * @return
+     */
     @RequestMapping("/user/token/{token}")
     @ResponseBody
-    //异步请求需要设置allowCredentials=true表示允许接收cookie数据
+    //异步请求需要设置   allowCredentials=true表示允许接收cookie数据
     @CrossOrigin(allowCredentials = "true")
     public EgoResult token(HttpSession session){
         Object obj = session.getAttribute("loginUser");
@@ -126,7 +131,6 @@ public class PassportController {
         return EgoResult.err("获取用户信息失败");
     }
 
-    // http://localhost:8084/user/logout/M2E0NDBjNjItZjc5Yi00ODAzLWEzMGUtNDA2YjBlNThhODM1
     @RequestMapping("/user/logout/{token}")
     @ResponseBody
     @CrossOrigin(allowCredentials = "true")

@@ -49,7 +49,7 @@ public class TbContentCategoryServiceImpl implements TbContentCategoryService {
             if(index == 1){
                 return EgoResult.ok(tbContentCategory);
             }
-        } catch (Exception e) {
+        } catch (DaoException e) {
             e.printStackTrace();
         }
         return EgoResult.err("创建内容类目失败");

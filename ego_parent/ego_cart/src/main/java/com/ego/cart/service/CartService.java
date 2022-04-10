@@ -38,20 +38,4 @@ public interface CartService {
      */
     EgoResult delete(long id);
 
-
-    /**
-     * 显示订单页面
-     * @param ids
-     * @return
-     */
-    List<OrderCartPojo> showOrderCart(List<Long> ids);
-
-    /**
-     * 根据用户id和删除商品id删除用户购物车中商品
-     * @param userId
-     * @param ids
-     * @return
-     */
-    int deleteUserCart(long userId,long[] ids);
-
 }

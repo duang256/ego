@@ -42,7 +42,6 @@ public class TbContentCategoryDubboServiceImpl implements TbContentCategoryDubbo
                 //判断父类目是否为true
                 TbContentCategory parent = tbContentCategoryMapper.selectByPrimaryKey(tbContentCategory.getParentId());
                 if(!parent.getIsParent()){
-                    //new一个新的,数据库只用改一个数据，提高数据库效率
                     TbContentCategory parUpdate = new TbContentCategory();
                     parUpdate.setId(parent.getId());
                     parUpdate.setIsParent(true);
@@ -76,22 +75,49 @@ public class TbContentCategoryDubboServiceImpl implements TbContentCategoryDubbo
         return 0;
     }
 
+    /**
+     * 逻辑状态删除内容分类
+     * @param id
+     * @return
+     * @throws DaoException
+     */
     @Override
     @Transactional
     public int deleteById(long id) throws DaoException{
         Date date = new Date();
+
         TbContentCategory tbContentCategory = new TbContentCategory();
         tbContentCategory.setId(id);
         tbContentCategory.setUpdated(date);
         tbContentCategory.setStatus(2);
-        
         //删除当前节点
         int index = tbContentCategoryMapper.updateByPrimaryKeySelective(tbContentCategory);
         if(index == 1){
+
             deleteChildrenById(id,date);
-            //不出错就return 1
+
+            //判断当前节点的父节点是否还有其他正常状态的子节点，如果没有，则父节点is_parent应改为false
+
+            //当前节点
+            TbContentCategory current = tbContentCategoryMapper.selectByPrimaryKey(id);
+            //当前节点的所有正常状态子节点
+            TbContentCategoryExample childrenExample = new TbContentCategoryExample();
+            childrenExample.createCriteria().andParentIdEqualTo(current.getParentId()).andStatusEqualTo(1);
+            List<TbContentCategory> childrenList = tbContentCategoryMapper.selectByExample(childrenExample);
+
+            if(childrenList != null && childrenList.size() == 0){
+                TbContentCategory parent = new TbContentCategory();
+                tbContentCategory.setId(current.getParentId());
+                tbContentCategory.setIsParent(false);
+                tbContentCategory.setUpdated(date);
+                int indexParent = tbContentCategoryMapper.updateByPrimaryKeySelective(parent);
+                if(indexParent != 1){
+                    throw  new DaoException("删除内容类目修改父节点is_parent失败");
+                }
+            }
             return 1;
         }
+
         throw new DaoException("删除内容类目失败");
     }
 
@@ -103,42 +129,28 @@ public class TbContentCategoryDubboServiceImpl implements TbContentCategoryDubbo
      * @throws DaoException
      */
     private void deleteChildrenById(long id, Date date)  throws DaoException{
+
         TbContentCategoryExample example = new TbContentCategoryExample();
-        example.createCriteria().andParentIdEqualTo(id);
+        example.createCriteria().andParentIdEqualTo(id).andStatusEqualTo(1);
+        //查询子类目
         List<TbContentCategory> list = tbContentCategoryMapper.selectByExample(example);
+
         for(TbContentCategory category : list){
+            //删除子类目
             TbContentCategory updateCategory = new TbContentCategory();
             updateCategory.setId(category.getId());
             updateCategory.setStatus(2);
             updateCategory.setUpdated(date);
             int index = tbContentCategoryMapper.updateByPrimaryKeySelective(updateCategory);
+
             if(index == 1){
-                //判断当前节点的父节点是否还有其他正常状态的子节点，如果没有，则父节点is_parent应改为false
-
-                //当前节点
-                TbContentCategory current = tbContentCategoryMapper.selectByPrimaryKey(id);
-                //当前节点的所有子节点
-                TbContentCategoryExample childrenExample = new TbContentCategoryExample();
-                childrenExample.createCriteria().andParentIdEqualTo(current.getParentId());
-                List<TbContentCategory> childrenList = tbContentCategoryMapper.selectByExample(childrenExample);
-
-                if(childrenList != null && childrenList.size() == 0){
-                    TbContentCategory tbContentCategory = new TbContentCategory();
-                    tbContentCategory.setId(current.getParentId());
-                    tbContentCategory.setIsParent(false);
-                    tbContentCategory.setUpdated(date);
-                    int indexParent = tbContentCategoryMapper.updateByPrimaryKeySelective(tbContentCategory);
-                    if(indexParent != 1){
-                        throw  new DaoException("删除内容类目修改父节点is_parent失败");
-                    }
-                }
-                if(current.getIsParent()){
-                    deleteChildrenById(updateCategory.getId(),date);
+                if(category.getIsParent()){
+                    //如果子类目为父节点，继续递归
+                    deleteChildrenById(category.getId(),date);
                 }
             }else{
                 throw new DaoException("删除内容类目更新状态失败");
             }
         }
-
     }
 }

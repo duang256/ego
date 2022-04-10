@@ -1,9 +1,12 @@
 package com.ego.search.service;
 
+import com.ego.commons.pojo.EgoResult;
+
 import java.util.List;
 import java.util.Map;
 
 public interface SearchService {
+
     /**
      * 实现solr数据查询
      * @param q

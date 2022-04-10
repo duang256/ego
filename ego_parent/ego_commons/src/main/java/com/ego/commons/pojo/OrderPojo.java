@@ -6,6 +6,9 @@ import com.ego.pojo.TbOrderShipping;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 接受前端数据的包装类
+ */
 public class OrderPojo implements Serializable {
     public static final Long serialVersionUID=1L;
     // 付款价格

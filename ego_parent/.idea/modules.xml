@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ego_api/ego_api.iml" filepath="$PROJECT_DIR$/ego_api/ego_api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_cart/ego_cart.iml" filepath="$PROJECT_DIR$/ego_cart/ego_cart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_commons/ego_commons.iml" filepath="$PROJECT_DIR$/ego_commons/ego_commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_item/ego_item.iml" filepath="$PROJECT_DIR$/ego_item/ego_item.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_mail/ego_mail.iml" filepath="$PROJECT_DIR$/ego_mail/ego_mail.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_manage/ego_manage.iml" filepath="$PROJECT_DIR$/ego_manage/ego_manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_mapper/ego_mapper.iml" filepath="$PROJECT_DIR$/ego_mapper/ego_mapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_parent.iml" filepath="$PROJECT_DIR$/ego_parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_passport/ego_passport.iml" filepath="$PROJECT_DIR$/ego_passport/ego_passport.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_pojo/ego_pojo.iml" filepath="$PROJECT_DIR$/ego_pojo/ego_pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_portal/ego_portal.iml" filepath="$PROJECT_DIR$/ego_portal/ego_portal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_provider/ego_provider.iml" filepath="$PROJECT_DIR$/ego_provider/ego_provider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_rabbit_send/ego_rabbit_send.iml" filepath="$PROJECT_DIR$/ego_rabbit_send/ego_rabbit_send.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_rabbitmq_receive/ego_rabbitmq_receive.iml" filepath="$PROJECT_DIR$/ego_rabbitmq_receive/ego_rabbitmq_receive.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_redis/ego_redis.iml" filepath="$PROJECT_DIR$/ego_redis/ego_redis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_search/ego_search.iml" filepath="$PROJECT_DIR$/ego_search/ego_search.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ego_trade/ego_trade.iml" filepath="$PROJECT_DIR$/ego_trade/ego_trade.iml" />
+    </modules>
+  </component>
+</project>
