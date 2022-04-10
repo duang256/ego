@@ -2,7 +2,7 @@
 
 
 
-![image-20220402211247688](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20220402211247688.png)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/8b83c2f94acc4f0185b9e9fed1e04aed.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAX-WHjOaZqOS4pOeCueWNil8=,size_14,color_FFFFFF,t_70,g_se,x_16)
 
 
 
@@ -30,7 +30,7 @@
 
 
 
-![image-20220402220222031](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20220402220222031.png)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/409d74df7a384491ba82737081631eab.png)
 
 provider1和provider2配置相同的注册名到zk，自动集群化，nginx负载均衡portal1和portal2，fastdfs做文件存储，solr做商品搜索，mysql1、mysql2主从分离、mycat分库分表（限于电脑配置，这里将分片放在了一个主机上，理论上应该每个分片一个主从分离）、rabbitmq中间价同步异步消息、redis做商品、内容缓存，用redis做springSession
 
